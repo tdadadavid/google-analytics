@@ -1,0 +1,50 @@
+services:
+  db:
+    image: clickhouse/clickhouse-server
+    restart: always
+    container_name: "analytics_db"
+    ports:
+      - 9000:9000
+      - 8123:8123
+    volumes:
+      - clickhouse_data:/var/lib/postgresql/data
+    depends_on:
+      - caddy
+  
+  caddy:
+    build:
+      context: ./infra
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "6000:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+  
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    hostname: "analytics"
+    env_file:
+      - .env
+    container_name: "analytics"
+    ports:
+      - 7500:7500
+    volumes:
+      - server_data:/var/lib/sevrer-data
+    depends_on:
+      - caddy
+      - clickhouse
+ 
+volumes:
+  clickhouse_data:
+    driver: local
+ 

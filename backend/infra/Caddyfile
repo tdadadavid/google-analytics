@@ -1,0 +1,8 @@
+{
+	email davidtofunmidada@gmail.com
+}
+
+analytics {
+	reverse_proxy http://analytics:7500;
+}
+

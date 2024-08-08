@@ -1,0 +1,24 @@
+{
+  "name": "ganalytics",
+  "version": "1.0.0",
+  "description": "building a web analytics service",
+  "main": "track.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf static/track* && esbuild --bundle --minify --global-name=_goTracker --format=esm --outfile=static/track.js ./src/tracker.ts",
+    "start": "npm run build && http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/tdadadavid/ganalytics"
+  },
+  "author": "king",
+  "license": "ISC",
+  "dependencies": {
+    "esbuild": "^0.23.0",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
